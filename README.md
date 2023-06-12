@@ -1,2 +1,2 @@
 # MatRexAlgs
-Repository containing algorithms for matrix reordering. The goal of this repository is to group known algorithms that achieve this reordering in Python.
+The implemented algorithm right now is called [MSRO](https://onlinelibrary.wiley.com/doi/abs/10.1002/(SICI)1099-1506(199904/05)6:3%3C189::AID-NLA160%3E3.0.CO;2-C). By switching the columns (or the rows) order in the initial matrix, it minimizes the mean/max front size of this matrix.
