@@ -378,7 +378,7 @@ def update_data(
     -------
     This function lets us permute the desired rows in `m`, update the values in
     `P` and flag nodes in `Gr` that become inactive by specifying a value of
-    `-np.inf` in `P` once the row has been permuted and it relabels the nodes
+    `smallest_value` in `P` once the row has been permuted and it relabels the nodes
     in the row-graph `Gr` according to the row permutation.
 
     Parameters
