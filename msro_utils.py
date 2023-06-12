@@ -409,6 +409,11 @@ def update_data(
 
     `Gr` : nx.Graph
         The row-graph after relabeling the nodes because of the row permutation.
+    
+    `e` : int
+        The updated ending node label. It needs to be changed since if the row id `e`
+        has been selected by the priority function, then this row id will become
+        `assembling_idx`, which is important to keep in memory.
     """
     assembling_idx, row_to_assemble_idx = rows_to_switch
     # Update the row graph (relabel the selected nodes and specify which nodes became active)
