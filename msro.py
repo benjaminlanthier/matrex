@@ -44,7 +44,7 @@ def get_mean_row_front_size(m):
     return np.mean(front_row_sizes)
 
 
-def get_max_row_front_size(B):
+def get_max_row_front_size(m):
     """
     Purpose
     -------
@@ -61,7 +61,7 @@ def get_max_row_front_size(B):
         The max of the front row size of `m`.
     """
     front_row_sizes = []
-    for row in B:
+    for row in m:
         ones_indices = np.where(row == 1)[0]
         front_row_sizes.append(ones_indices[-1] - ones_indices[0])
     return np.max(front_row_sizes)
