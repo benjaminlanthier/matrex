@@ -1,5 +1,7 @@
 # Files I want to ignore
 *.ipynb
+N102/
+N150/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
