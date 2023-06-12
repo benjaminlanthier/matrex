@@ -14,11 +14,13 @@ import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
 
-from msro_utils import (initialize_rowGraph,
-                        get_nodes_s_and_e,
-                        get_row_to_assemble,
-                        initialize_P,
-                        update_data)
+from msro_utils import (
+    initialize_rowGraph,
+    get_nodes_s_and_e,
+    get_row_to_assemble,
+    initialize_P,
+    update_data,
+)
 
 
 def get_mean_row_front_size(m):
@@ -100,6 +102,13 @@ def msro(
     -------
     `m` : np.ndarray
         The modified version of `m` after the application of the algorithm.
+
+    Example
+    -------
+    >>> import numpy as np
+    >>> from MatRexAlgs.msro import msro
+    >>> m = np.random.randint(2, (6,6))
+    >>> optimized_m = msro(m, perm = "columns")
     """
     # Properly setup the given matrix to permute the rows or the columns
     if perm == "columns":

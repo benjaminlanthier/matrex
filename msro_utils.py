@@ -1,3 +1,5 @@
+# pylint: disable=C0103
+
 import numpy as np
 import networkx as nx
 
@@ -408,7 +410,7 @@ def update_data(
 
     `Gr` : nx.Graph
         The row-graph after relabeling the nodes because of the row permutation.
-    
+
     `e` : int
         The updated ending node label. It needs to be changed since if the row id `e`
         has been selected by the priority function, then this row id will become
