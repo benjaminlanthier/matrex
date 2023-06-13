@@ -3,9 +3,7 @@ Module that groups matrix reordering algorithms. Right now, it contains the [MSR
 algorithm, which was first implemented in the [HSL](https://www.hsl.rl.ac.uk/catalogue/mc62.html)
 library.
 
-`MatRexAlg` is for Matrix Reordering Algorithms.
-
-By - Benjamin Lanthier
+`MatRexAlg` stands for Matrix Reordering Algorithms.
 """
 
 # pylint: disable=C0103
