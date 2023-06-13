@@ -81,7 +81,8 @@ def msro(
     Apply the [MSRO](https://onlinelibrary.wiley.com/doi/abs/10.1002/(SICI)1099-1506(199904/05)6:3%3C189::AID-NLA160%3E3.0.CO;2-C)
     algorithm on the given matrix `m` in order to minimize the row front size and
     the front column size at the same time. This algorithm can permute the rows or
-    the columns of `m`.
+    the columns of `m`. The weights `W1` and `W2` are set to (`W1`,`W2`) = (2,1) for
+    the priority function `P`.
 
     Parameters
     ----------
