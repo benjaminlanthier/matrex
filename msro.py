@@ -3,7 +3,7 @@ Module that groups matrix reordering algorithms. Right now, it contains the [MSR
 algorithm, which was first implemented in the [HSL](https://www.hsl.rl.ac.uk/catalogue/mc62.html)
 library.
 
-`MatRexAlg` stands for Matrix Reordering Algorithms.
+`MatRexAlgs` stands for Matrix Reordering Algorithms.
 """
 
 # pylint: disable=C0103
@@ -125,14 +125,14 @@ def msro(
         nx.draw(Gr, with_labels=True)
         plt.show()
     s, e = get_nodes_s_and_e(Gr)
-    P, v = initialize_P(matrix, Gr, e)
+    P = initialize_P(matrix, Gr, e)
 
     # Update those variables until P contains only -np.inf
     while not np.all(P == smallest_value):
         assembling_idx, row_to_assemble_idx = get_row_to_assemble(Gr, P, s)
         rows_to_switch = [assembling_idx, row_to_assemble_idx]
         matrix, P, Gr, e = update_data(
-            matrix, P, v, Gr, rows_to_switch, e, smallest_value=smallest_value
+            matrix, P, Gr, rows_to_switch, e, smallest_value=smallest_value
         )
 
     # Return the matrix in the same format it was taken as an input

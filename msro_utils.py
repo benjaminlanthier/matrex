@@ -82,7 +82,7 @@ def get_nodes_s_and_e(Gr: nx.Graph) -> tuple[int, int]:
                 connected_pairs.append((n1, n2))
 
     # Get any of the 2 nodes that are separated by a distance = diameter
-    # Maybe just return the first pair found in the nested `for` loops ?
+    # Maybe I should just return the first pair found in the nested `for` loops
     random_id = np.random.randint(len(connected_pairs))
     return connected_pairs[random_id]
 
@@ -111,16 +111,12 @@ def get_rcgain_i(m: np.ndarray, nb_already_assembled_rows: int, row_id: int) -> 
     `rcgain` : int
         The increase of the front row size and the column row size from the
         permutation of the 2 given rows of the matrix.
-
-    `nold` : int
-        The number of variables in row `i` that are candidates for elimination.
     """
     # Assemble the given row
     matrix = np.array(m, copy=True)
     row = matrix[row_id]
     matrix = np.delete(matrix, row_id, axis=0)
     matrix = np.insert(matrix, nb_already_assembled_rows, row, axis=0)
-
     # Find the values of `s` and `newc
     s = 0
     newc = 0
@@ -137,8 +133,7 @@ def get_rcgain_i(m: np.ndarray, nb_already_assembled_rows: int, row_id: int) -> 
     rgain = 1 - s
     cgain = newc - s
     rcgain = rgain + cgain
-    nold = s
-    return rcgain, nold
+    return rcgain
 
 
 def initialize_P(m: np.ndarray, Gr: nx.Graph, e: int) -> list:
@@ -162,29 +157,16 @@ def initialize_P(m: np.ndarray, Gr: nx.Graph, e: int) -> list:
     -------
     `P` : list
         The initial priority function, linked with `matrix` and `Gr`.
-    
-    `v` : float
-        The normalizing factor in the expression of the priority function.
     """
     W1 = 2
     W2 = 1
-    W3 = 0.2
     P = []
-    distances = {}
-
-    # Save the distances between each nodes and the target node in a dictionnary
     for i in range(m.shape[0]):
-        distances[i] = nx.shortest_path_length(Gr, source=i, target=e)
-    
-    # Get the normalizing factor
-    v = 1 / np.sqrt(np.sum(value ** 2 for value in distances.values()))
-    
-    # Evaluate the initial priority function
-    for i in range(m.shape[0]):
-        rcgain_i, nold_i = get_rcgain_i(m, 0, i)
-        P_i = W1*rcgain_i + W2*v*distances[i] - W3*nold_i
+        rcgain_i = get_rcgain_i(m, 0, i)
+        d_ie = nx.shortest_path_length(Gr, source=i, target=e)
+        P_i = -W1 * rcgain_i + W2 * d_ie
         P.append(P_i)
-    return P, v
+    return P
 
 
 def get_row_to_assemble(
@@ -326,7 +308,6 @@ def update_m(
 def update_P(
     m: np.ndarray,
     P: list,
-    v: float,
     Gr: nx.Graph,
     row_to_assemble_idx: int,
     assembling_idx: int,
@@ -347,9 +328,6 @@ def update_P(
 
     `P` : list
         The previous priority function values.
-
-    `v` : float
-        The normalizing factor needed to evaluate the priority function.
 
     `Gr` : nx.Graph
         The row graph that has been properly updated according to the
@@ -379,12 +357,11 @@ def update_P(
     P = np.insert(P, assembling_idx, smallest_value)
     W1 = 2
     W2 = 1
-    W3 = 0.2
     for i in Gr.nodes():
         if Gr.nodes[i]["tag"] == "active":
-            rcgain_i, nold_i = get_rcgain_i(m, assembling_idx + 1, i)
+            rcgain_i = get_rcgain_i(m, assembling_idx + 1, i)
             d_ie = nx.shortest_path_length(Gr, source=i, target=e)
-            P_i = W1*rcgain_i + W2*v*d_ie - W3*nold_i
+            P_i = -W1 * rcgain_i + W2 * d_ie
             P[i] = P_i
     return P
 
@@ -392,7 +369,6 @@ def update_P(
 def update_data(
     m: np.ndarray,
     P: list,
-    v: float,
     Gr: nx.Graph,
     rows_to_switch: list,
     e: int,
@@ -414,13 +390,10 @@ def update_data(
     `P` : list
         The priority function applied in the MSRO algorithm.
 
-    `v` : float
-        The normalizing factor needed to evaluate the priority function.
-
     `Gr` : nx.Graph
         The row-graph of the matrix `m`.
 
-    `rows_to_switch` : list
+    rows_to_switch : list
         The index in which the row to assemble will go and the row to assemble in `m`
         according to the values in `P`. Get them by using `get_row_to_assemble()`.
 
@@ -454,7 +427,7 @@ def update_data(
 
     # Update the values in P
     P = update_P(
-        m, P, v, Gr, row_to_assemble_idx, assembling_idx, e, smallest_value=smallest_value
+        m, P, Gr, row_to_assemble_idx, assembling_idx, e, smallest_value=smallest_value
     )
 
     return m, P, Gr, e
