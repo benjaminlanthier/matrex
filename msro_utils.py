@@ -237,6 +237,7 @@ def get_row_to_assemble(
     return assembling_idx, row_to_assemble_idx
 
 
+# Find a way to not have to update the row graph and work with less objects to upgrade
 def update_Gr(Gr: nx.Graph, row_to_assemble_idx: int, assembling_idx: int) -> nx.Graph:
     """
     Purpose

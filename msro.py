@@ -3,7 +3,7 @@ Module that groups matrix reordering algorithms. Right now, it contains the [MSR
 algorithm, which was first implemented in the [HSL](https://www.hsl.rl.ac.uk/catalogue/mc62.html)
 library.
 
-`MatRexAlg` stands for Matrix Reordering Algorithms.
+`MatRexAlgs` stands for Matrix Reordering Algorithms.
 """
 
 # pylint: disable=C0103
@@ -99,6 +99,8 @@ def msro(
 
     Returns
     -------
+    * Should return the new row/column order instead of the matrix
+
     `m` : np.ndarray
         The modified version of `m` after the application of the algorithm.
 
