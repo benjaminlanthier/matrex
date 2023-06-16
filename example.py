@@ -10,6 +10,7 @@ import matplotlib
 import time
 import networkx as nx
 from utilities import MSRO
+from vectorizedUtilities import vectorizedMSRO
 
 def getFirstOrdering(matrix):
     """
@@ -47,7 +48,8 @@ if __name__ == "__main__":
     
     W1, W2, W3 = 2, 1, 0.2
     algorithmTime = time.time()
-    order = MSRO(input_matrix = matrix.T, W1 = W1, W2 = W2, W3 = W3)
+    #order = MSRO(input_matrix = matrix.T, W1 = W1, W2 = W2, W3 = W3)
+    order = vectorizedMSRO(input_matrix = matrix.T, W1 = W1, W2 = W2, W3 = W3)
     finishTime = time.time()
     print("Total algorithm time: {}s".format(finishTime - algorithmTime))
 
