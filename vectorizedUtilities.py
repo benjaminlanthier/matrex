@@ -10,7 +10,7 @@ import networkx as nx
 from utilities import pseudodiameter, findActiveRows
 from operator import itemgetter
 
-def deltaFrontsizeVectorized(front, rows, remainings):
+def change_in_frontsize_vectorized(front, rows, remainings):
   """
     - Purpose: Calculate the change in row and column frontsizes.
     - Input:
@@ -85,7 +85,7 @@ def calculateOrderingVectorized(graph, matrix, W1 = 2, W2 = 1, W3 = 0.2, verbose
     
     # Calculate function values in matricized form
     values = findFrontColumnsVectorized(matrix = front, rows = rows)
-    deltas = deltaFrontsizeVectorized(front = front, rows = rows, remainings = remainings)
+    deltas = change_in_frontsize_vectorized(front = front, rows = rows, remainings = remainings)
     score = -W1 * deltas + W2 * itemgetter(*tuple(active))(distances) - W3 * values
     selectionIndex = np.argmax(a = score)
     selection = active[selectionIndex]
