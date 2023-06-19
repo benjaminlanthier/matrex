@@ -23,7 +23,7 @@ def deltaFrontsizeVectorized(front, rows, remainings):
   frontColumns = (~np.any(a = front, axis = 0)).astype(int)
   newColumns = rows.astype(int) @ frontColumns.T
   zerosInRemainings = (~np.any(a = remainings, axis = 1)).astype(int)
-  fullySummed = np.sum(a = zerosInRemainings, axis = 1)
+  fullySummed = np.sum(a = zerosInRemainings @ rows.astype(int).T, axis = 1)
   
   return 1 + newColumns - 2 * fullySummed
 
