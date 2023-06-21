@@ -23,16 +23,18 @@ def change_in_frontsize(front, row, remaining):
   fullySummed = np.sum(np.logical_and(~np.any(a = remaining, axis = 0), row))
   return 1 + newColumns - 2 * fullySummed
   
-def pseudodiameter(graph):
+def pseudodiameter(graph, seed = 111):
   """
     - Purpose: Find nodes i and j which have a distance close to the diameter.
                Based on Mathematica's approach:
                https://reference.wolfram.com/language/GraphUtilities/ref/PseudoDiameter.html
     - Input:
       - graph (NetworkX object): The row graph of the matrix.
+      - seed (integer): The seed for reproducibility of the initial random node choice.
     - Output:
       - (i, j) (tuple): The node indices that are separated by the pseudodiameter.
   """
+  np.random.seed(seed = seed)
   nodes = graph.nodes()
   start = np.random.choice(nodes)
   finalLoop = False
@@ -53,18 +55,23 @@ def pseudodiameter(graph):
 
   return (start, farthestNode)
 
-def findActiveRows(reordered, rowGraph):
+def find_active_rows(reordered, row_graph):
   """
-    - Purpose: Find row indices which correspond to active rows.
+    - Purpose: Find active row indices by analyzing the submatrix of the row_graph
+               which corresponds to the current front.
+
+               If an entry (i,j) of the row_graph is nonzero, this means row i is
+               connected to row j (they have at least one shared index that has a
+               nonzero entry in both rows). First, the function finds all such nonzero
     - Input:
-      - reorderd (list of integers): The current nodes that are part of the front.
-      - rowGraph (array): The row graph of the matrix.
+      - reordered (list of integers): The current nodes that are part of the front.
+      - row_graph (array): The row graph of the matrix.
     - Output:
       - active (list of integers): The active node indices.
   """
   # Use the row graph to find indices of active nodes that aren't already part of the front.
 
-  candidates = np.nonzero(np.any(rowGraph[reordered], axis = 0))[0]
+  candidates = np.nonzero(np.any(row_graph[reordered], axis = 0))[0]
   active = np.setdiff1d(ar1 = candidates, ar2 = reordered)
   return active
 
@@ -82,7 +89,7 @@ def findFrontColumns(matrix, row):
   consider = np.any(row)
   return np.sum(np.logical_and(~currentFrontColumns, consider))
 
-def calculateOrdering(graph, matrix, W1 = 2, W2 = 1, W3 = 0.2, verbose = False):
+def calculateOrdering(graph, matrix, W1 = 2, W2 = 1, W3 = 0.2, seed = 111, verbose = False):
   """
     - Purpose: For a connected graph, calculate an ordering of the nodes.
     - Inputs:
@@ -90,12 +97,13 @@ def calculateOrdering(graph, matrix, W1 = 2, W2 = 1, W3 = 0.2, verbose = False):
       - matrix (array): The matrix for the entire original graph.
       - W1, W2, W3 (positive integers): The weights for balancing the algorithm's
                                         considerations.
+      - seed (integer): For reproducibility of the pseudodiameter.
       - verbose (Boolean): If True, prints out information about the process.
     - Output:
       - order (list of integers): A permutation of the graph nodes.
   """
   rowGraph = matrix @ matrix.T
-  start, target = pseudodiameter(graph = graph)
+  start, target = pseudodiameter(graph = graph, seed = seed)
   distances = nx.algorithms.single_source_shortest_path_length(G = graph, source = target)
   if verbose:
     print("Distances: ", distances)
@@ -103,7 +111,7 @@ def calculateOrdering(graph, matrix, W1 = 2, W2 = 1, W3 = 0.2, verbose = False):
   order = [start]
   while len(order) < len(graph):
     # Find active rows
-    active = findActiveRows(reordered = order, rowGraph = rowGraph)
+    active = find_active_rows(reordered = order, row_graph = rowGraph)
     priorities = {}
     front = matrix[order]
     for node in active:
@@ -134,13 +142,14 @@ def calculateOrdering(graph, matrix, W1 = 2, W2 = 1, W3 = 0.2, verbose = False):
   assert len(np.unique(order)) == len(allNodes)
   return order
 
-def MSRO(input_matrix, W1 = 2, W2 = 1, W3 = 0.2, verbose = False):
+def MSRO(input_matrix, W1 = 2, W2 = 1, W3 = 0.2, seed = 111, verbose = False):
   """
     - Purpose: Reorder the rows of the input matrix to minimize its front.
     - Input:
       - input_matrix (array): The matrix to reorder.
       - W1, W2, W3 (positive integers): The weights for balancing the algorithm's
                                         considerations.
+      - seed (integer): For reproducibility of the pseudodiameter.
       - verbose (Boolean): If True, prints out information about the process.
     - Output:
       - totalReordering (1D array): The permutation of the rows.
@@ -160,6 +169,6 @@ def MSRO(input_matrix, W1 = 2, W2 = 1, W3 = 0.2, verbose = False):
   for e, graph in enumerate(subgraphs):
     if verbose:
       print("Subgraph: ", e)
-    order = calculateOrdering(graph = graph, matrix = matrix, W1 = W1, W2 = W2, W3 = W3, verbose = verbose)
+    order = calculateOrdering(graph = graph, matrix = matrix, W1 = W1, W2 = W2, W3 = W3, seed = seed, verbose = verbose)
     totalReordering.extend(order)
   return totalReordering
