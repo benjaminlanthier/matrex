@@ -29,15 +29,15 @@ $$
 $$
 
 In both those equations, we have that :
- * rcgain$_i$ is "the increases to the row and column front sizes resulting from assembling row i next" [1]
+ * $\text{rcgain}_i$ is "the increases to the row and column front sizes resulting from assembling row i next" [1]
  * $d(i, e)$ is the distance between the row $i$ and the row $e$, where $e$ is the target row, found by using the pseudodiameter of the row graph of the input matrix.
- * nold$_i$ is "the number of variables in row $i$ that are candidates for elimination and have already been brought into the front" [2].
+ * $\text{nold}_i$ is "the number of variables in row $i$ that are candidates for elimination and have already been brought into the front" [2].
 
 # Dependencies
 Packages needed to run this algorithm :
  * `numpy`
  * `networkx`
- * \textit{Optional} : `matplotlib`
+ * _Optional_ : `matplotlib`
 
 # References
 [1] Scott, Jennifer A. ‘A New Row Ordering Strategy for Frontal Solvers’. Numerical Linear Algebra with Applications, vol. 6, no. 3, Apr. 1999, pp. 189–211. DOI.org (Crossref), https://doi.org/10.1002/(SICI)1099-1506(199904/05)6:3<189::AID-NLA160>3.0.CO;2-C.
