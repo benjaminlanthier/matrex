@@ -5,6 +5,8 @@ Purpose: A set of efficient, matrix-based tools for calculating the reordering o
 Date created: 2023-06-14
 """
 
+# pylint: disable=C0103
+
 import numpy as np
 import networkx as nx
 
@@ -19,10 +21,10 @@ def change_in_frontsize(front, row, remaining):
     - Output:
       - (integer): The change in front sizes.
     """
-    frontColumns = np.any(a=front, axis=0)  # Boolean mask for which indices are present
-    newColumns = np.sum(np.logical_and(~frontColumns, row))
-    fullySummed = np.sum(np.logical_and(~np.any(a=remaining, axis=0), row))
-    return 1 + newColumns - 2 * fullySummed
+    front_columns = np.any(a=front, axis=0)  # Boolean mask for which indices are present
+    new_columns = np.sum(np.logical_and(~front_columns, row))
+    fully_summed = np.sum(np.logical_and(~np.any(a=remaining, axis=0), row))
+    return 1 + new_columns - 2 * fully_summed
 
 
 def pseudodiameter(graph, seed=111):
@@ -39,27 +41,27 @@ def pseudodiameter(graph, seed=111):
     np.random.seed(seed=seed)
     nodes = graph.nodes()
     start = np.random.choice(nodes)
-    finalLoop = False
+    final_loop = False
     distance = 0
     while True:
         distances = nx.algorithms.single_source_shortest_path_length(
             G=graph, source=start
         )
-        farthestNode = max(distances, key=distances.get)
-        newDistance = distances[farthestNode]
-        if finalLoop:
+        farthest_node = max(distances, key=distances.get)
+        new_distance = distances[farthest_node]
+        if final_loop:
             break
-        if newDistance == distance:
-            finalDegrees = dict(graph.degree(nbunch=distances.keys()))
-            start = min(finalDegrees, key=finalDegrees.get)
-            finalLoop = True
+        if new_distance == distance:
+            final_degrees = dict(graph.degree(nbunch=distances.keys()))
+            start = min(final_degrees, key=final_degrees.get)
+            final_loop = True
         else:
-            start = farthestNode
-            distance = newDistance
+            start = farthest_node
+            distance = new_distance
 
     # print(f"(start, target) : ({start}, {farthestNode})")
 
-    return (start, farthestNode)
+    return (start, farthest_node)
 
 
 def find_active_rows(reordered, row_graph):
@@ -83,7 +85,7 @@ def find_active_rows(reordered, row_graph):
     return active
 
 
-def findFrontColumns(matrix, row):
+def find_front_columns(matrix, row):
     """
     - Purpose: For a given row, calculate the number of columns that
                have nonzero elements and are already in the front.
@@ -93,11 +95,11 @@ def findFrontColumns(matrix, row):
     - Output:
       - (integer): The number of columns already in the front.
     """
-    currentFrontColumns = np.any(a=matrix, axis=0)  # Boolean mask
-    return np.sum(np.logical_and(currentFrontColumns, row))
+    current_front_columns = np.any(a=matrix, axis=0)  # Boolean mask
+    return np.sum(np.logical_and(current_front_columns, row))
 
 
-def calculateOrdering(graph, matrix, W1=2, W2=1, W3=0.2, seed=111, verbose=False):
+def calculate_ordering(graph, matrix, W1=2, W2=1, W3=0.2, seed=111, verbose=False):
     """
     - Purpose: For a connected graph, calculate an ordering of the nodes.
     - Inputs:
@@ -110,35 +112,33 @@ def calculateOrdering(graph, matrix, W1=2, W2=1, W3=0.2, seed=111, verbose=False
     - Output:
       - order (list of integers): A permutation of the graph nodes.
     """
-    rowGraph = matrix @ matrix.T
+    row_graph = matrix @ matrix.T
     start, target = pseudodiameter(graph=graph, seed=seed)
     distances = nx.algorithms.single_source_shortest_path_length(G=graph, source=target)
     if verbose:
         print("Distances: ", distances)
-    allNodes = graph.nodes()
+    all_nodes = graph.nodes()
     order = [start]
     while len(order) < len(graph):
         # Find active rows
-        active = find_active_rows(reordered=order, row_graph=rowGraph)
+        active = find_active_rows(reordered=order, row_graph=row_graph)
         priorities = {}
         front = matrix[order]
-        data = []
         for node in active:
             order.append(node)
-            unordered = np.setdiff1d(ar1=allNodes, ar2=order)
+            unordered = np.setdiff1d(ar1=all_nodes, ar2=order)
             order.pop()
             row, remaining = matrix[node], matrix[unordered]
-            frontColumns = findFrontColumns(matrix=front, row=row)
-            data.append(frontColumns)
-            deltaFront = change_in_frontsize(front=front, row=row, remaining=remaining)
-            score = -W1 * deltaFront + W2 * distances[node] - W3 * frontColumns
+            front_columns = find_front_columns(matrix=front, row=row)
+            delta_front = change_in_frontsize(front=front, row=row, remaining=remaining)
+            score = -W1 * delta_front + W2 * distances[node] - W3 * front_columns
             priorities[node] = score
             if verbose:
                 print("Node: ", node)
                 print("Distance to target: ", distances[node])
                 print(
                     "Columns already in the front: ",
-                    findFrontColumns(matrix=front, row=row),
+                    find_front_columns(matrix=front, row=row),
                 )
                 print("Order    : ", order)
                 print("Unordered: ", unordered)
@@ -153,11 +153,11 @@ def calculateOrdering(graph, matrix, W1=2, W2=1, W3=0.2, seed=111, verbose=False
             print(priorities)
             print("Selection: ", selection)
             print()
-    assert len(np.unique(order)) == len(allNodes)
+    assert len(np.unique(order)) == len(all_nodes)
     return order
 
 
-def MSRO(input_matrix, W1=2, W2=1, W3=0.2, seed=111, verbose=False):
+def msro(input_matrix, W1=2, W2=1, W3=0.2, seed=111, verbose=False):
     """
     - Purpose: Reorder the rows of the input matrix to minimize its front.
     - Input:
@@ -174,21 +174,21 @@ def MSRO(input_matrix, W1=2, W2=1, W3=0.2, seed=111, verbose=False):
     matrix = input_matrix.astype(bool)
 
     # Compute initial distances between rows of the matrix.
-    rowGraph = nx.from_numpy_array(matrix @ matrix.T)
+    row_graph = nx.from_numpy_array(matrix @ matrix.T)
 
     # Check if the graph is disconnected and break into components
-    totalReordering = []
+    total_reordering = []
     subgraphs = [
-        rowGraph.subgraph(component).copy()
-        for component in nx.connected_components(rowGraph)
+        row_graph.subgraph(component).copy()
+        for component in nx.connected_components(row_graph)
     ]
     if verbose:
         print("Component sizes: ", [len(i) for i in subgraphs])
     for e, graph in enumerate(subgraphs):
         if verbose:
             print("Subgraph: ", e)
-        order = calculateOrdering(
+        order = calculate_ordering(
             graph=graph, matrix=matrix, W1=W1, W2=W2, W3=W3, seed=seed, verbose=verbose
         )
-        totalReordering.extend(order)
-    return totalReordering
+        total_reordering.extend(order)
+    return total_reordering

@@ -1,7 +1,27 @@
+"""
+A set of efficient, matrix-based tools for calculating the reordering of a
+matrix's rows. As much as possible, matrix-based computations are used instead
+of loops.
+
+The algorithm is iterative. At each step, it chooses the next index that is
+part of the new ordering from a list of candidates. This implementation follows
+an object that is a list of lists where the lists contain 2 values. The first
+one is the original row index and the second one is its state, either 'inactive',
+'active' or 'assembled'. It moves those sublists in the list so that the index of
+the sublist corresponds to the physical (current) row index in the matrix. It lets
+the algorithm follow the original row index wherever this row is in the matrix.
+On my laptop, it deals with a 1000x1000 matrix in around 4 minutes.
+
+
+Date created: 2023-06-16
+"""
+
+# pylint: disable=C0103
+
+from operator import itemgetter
 import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
-from operator import itemgetter
 
 from msro1 import pseudodiameter
 
@@ -32,10 +52,10 @@ def generate_rowGraph(m: np.ndarray, show: bool = False) -> nx.Graph:
     if show:
         nx.draw(Gr, with_labels=True)
         plt.show()
-    subGraphs = [
+    sub_graphs = [
         Gr.subgraph(component).copy() for component in nx.connected_components(Gr)
     ]
-    return subGraphs
+    return sub_graphs
 
 
 def get_subgraph_data(
@@ -82,7 +102,7 @@ def get_subgraph_data(
 
 def update_rows_order(
     rows_states: np.ndarray,
-    row_to_assemble_id: int, # the current row id, not the original one
+    row_to_assemble_id: int,  # the current row id, not the original one
     assembling_step: int,
     neighbors: dict,
 ) -> np.ndarray:
@@ -138,6 +158,34 @@ def get_rcgain_and_nold(
     row_ids: list,  # the current row indexes
     nb_assembled_rows: int,
 ) -> tuple[np.ndarray, np.ndarray]:
+    """
+    Purpose
+    -------
+    Evaluate the increase of the front row size and the column row size from the
+    permutation of the 2 given rows of the matrix.
+
+    Parameters
+    ----------
+    `m` : np.ndarray
+        The given matrix for which we want to evaluate the increase in the front
+        row and column sizes if we were to permute the 2 given rows.
+
+    rows_states : np.ndarray([int, str], dtype = object)
+        The object that saves the original row indexes and their states.
+
+    nb_assembled_rows : int
+        The number of rows that have already been assembled in the front.
+
+    Returns
+    -------
+    `rcgain` : list
+        The increase of the front row size and the column row size from the
+        assembling of all the next active rows.
+
+    `nold` : list
+        The number of variables in row `i` that are candidates for elimination
+        and that are already in the front.
+    """
     new_rows_order = [i[0] for i in rows_states]
     new_orders = []
     tensor = []
@@ -406,7 +454,7 @@ def msro(
     elif perm == "rows":
         matrix = np.array(m, dtype=bool, copy=True)
     else:
-        raise f"Bad input for `perm`, please use 'rows' or 'columns'"
+        raise f"Bad input for `perm`. It should be either 'rows' or 'columns', but you used {perm}"
 
     rows_states = []
     for i in range(matrix.shape[0]):

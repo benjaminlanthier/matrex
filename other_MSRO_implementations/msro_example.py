@@ -4,22 +4,26 @@ matrix. It shows the form of the output and that all implementations give
 the same results.
 
 Date created: 2023-06-16
+
 """
+
+# pylint: disable=C0103
+
 import numpy as np
-from msro1 import MSRO as msro1
+from msro1 import msro as msro1
 from msro2 import msro as msro2
 
 
-def getWidths(matrix):
-    widths = []
-    for row in matrix:
-        elements = np.nonzero(row)[0]
-        if len(elements) > 0:
-            width = np.max(elements) - np.min(elements)
-        else:
-            width = 0
-        widths.append(width)
-    return widths
+# def get_widths(matrix):
+#     widths = []
+#     for row in matrix:
+#         elements = np.nonzero(row)[0]
+#         if len(elements) > 0:
+#             width = np.max(elements) - np.min(elements)
+#         else:
+#             width = 0
+#         widths.append(width)
+#     return widths
 
 
 if __name__ == "__main__":
