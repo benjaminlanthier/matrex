@@ -42,4 +42,4 @@ Packages needed to run this algorithm :
 # References
 [1] Scott, Jennifer A. ‘A New Row Ordering Strategy for Frontal Solvers’. Numerical Linear Algebra with Applications, vol. 6, no. 3, Apr. 1999, pp. 189–211. DOI.org (Crossref), https://doi.org/10.1002/(SICI)1099-1506(199904/05)6:3<189::AID-NLA160>3.0.CO;2-C.
 
-[2] HSL, a collection of Fortran codes for large-scale scientific computation. See http://www.hsl.rl.ac.uk/
+[2] HSL, a collection of Fortran codes for large-scale scientific computation. See https://www.hsl.rl.ac.uk/catalogue/mc62.html
