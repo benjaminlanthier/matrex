@@ -320,7 +320,7 @@ def msro(
     Example
     -------
     >>> import numpy as np
-    >>> from matrexalgs import msro
+    >>> from matrex import msro
     >>> m = np.array([[1, 0, 1, 1, 0, 0],
     >>>               [0, 1, 0, 1, 1, 0],
     >>>               [1, 0, 1, 1, 0, 1],
