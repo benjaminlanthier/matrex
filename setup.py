@@ -12,7 +12,7 @@ setup(
    long_description=long_description,
    long_description_content_type="text/markdown",
    author=["benjaminlanthier", "cotejer"],
-   author_email=['benjamin.lanthier2@usherbrooke.ca', 'cote.jeremy@usherbrooke.ca'],
+   author_email=['benjamin.lanthier2@usherbrooke.ca', 'jeremy.cote6@usherbrooke.ca'],
    url="https://github.com/benjaminlanthier/MatRexAlgs/",
    packages=['MatRexAlgs'],
    classifiers=[

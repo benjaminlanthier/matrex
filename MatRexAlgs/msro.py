@@ -295,8 +295,7 @@ def msro(
     Purpose
     -------
     Apply the MSRO (Modified Sloan Row Ordering) algorithm on the input matrix `m`
-    in order to find the row (or column) ordering that minimizes the row (or column)
-    front size.
+    in order to find the row ordering that minimizes the row front size.
 
     Arguments
     ---------
