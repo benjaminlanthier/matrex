@@ -1,7 +1,11 @@
 # MatRexAlgs
 `MatRexAlgs` stands for Matrix Reordering Algorithms.
 
-The library implements the Modified Sloan Row Ordering (MSRO) algorithm. By permuting the rows of a matrix, the algorithm minimizes the mean/max front size of this matrix. **(JC: It would be nice to have a picture here or some explanation of the front size so that this term makes sense.)** The original Fortran implementation is called [mc62](https://www.hsl.rl.ac.uk/catalogue/mc62.html) and is part of the HSL library.
+The library implements the Modified Sloan Row Ordering (MSRO) algorithm. By permuting the rows of a matrix, the algorithm minimizes the mean/max front size of this matrix. The front size minimization can be viewed in the following example :
+
+![picture](front_size.png)
+
+**(JC: It would be nice to have a picture here or some explanation of the front size so that this term makes sense.)** The original Fortran implementation is called [mc62](https://www.hsl.rl.ac.uk/catalogue/mc62.html) and is part of the HSL library.
 
 ## Installation
 
