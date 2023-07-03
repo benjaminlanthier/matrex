@@ -3,9 +3,7 @@
 
 The library implements the Modified Sloan Row Ordering (MSRO) algorithm. By permuting the rows of a matrix, the algorithm minimizes the mean/max front size of this matrix. The front size minimization can be viewed in the following example :
 
-![Alt text](/front_size.png)
-![image](https://github.com/benjaminlanthier/MatRexAlgs/assets/91567620/5a367873-34aa-403e-b053-3c666c78a1b5)
-
+![image](https://github.com/benjaminlanthier/MatRexAlgs/assets/91567620/cce9ec89-97a1-4749-8bbc-d172cb108474)
 
 **(JC: It would be nice to have a picture here or some explanation of the front size so that this term makes sense.)** The original Fortran implementation is called [mc62](https://www.hsl.rl.ac.uk/catalogue/mc62.html) and is part of the HSL library.
 
