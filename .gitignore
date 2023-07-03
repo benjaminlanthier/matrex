@@ -1,6 +1,6 @@
 # Files I want to ignore
-N102/
-N150/
+Images/
+front_size.py
 *.ipynb
 
 # Byte-compiled / optimized / DLL files

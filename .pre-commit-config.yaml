@@ -20,7 +20,7 @@ repos:
     hooks:
       - id: pylint
         additional_dependencies:
-        - .
+        - pylint
         - numpy
         - networkx
         name: pylint
