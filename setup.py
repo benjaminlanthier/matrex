@@ -29,5 +29,8 @@ setup(
         "numpy>=1.23.3",
         "networkx>=3.1",
     ],
+    extras_require={
+        "graph": ["matplotlib>=3.5.3"],
+    },
     python_requires=">=3.9",
 )
