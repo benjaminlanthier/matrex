@@ -20,8 +20,10 @@ import networkx as nx
 
 try:
     import matplotlib.pyplot as plt
+
+    plot = True
 except ImportError:
-    ploting = None
+    plot = False
 
 
 def pseudodiameter(graph: nx.Graph, seed: int = 111) -> tuple[int, int]:
@@ -356,7 +358,7 @@ def msro(
 
     # Compute initial distances between rows of the matrix.
     row_graph = nx.from_numpy_array(matrix @ matrix.T)
-    if ploting is not None and show_row_graph:
+    if plot and show_row_graph:
         nx.draw(row_graph, with_labels=True)
         plt.show()
 
