@@ -1,7 +1,14 @@
+"""
+Module that groups matrix reordering algorithms. Right now, it contains the [MSRO](https://onlinelibrary.wiley.com/doi/abs/10.1002/(SICI)1099-1506(199904/05)6:3%3C189::AID-NLA160%3E3.0.CO;2-C)
+algorithm, which was first implemented in the [HSL](https://www.hsl.rl.ac.uk/catalogue/mc62.html)
+library.
+"""
+
 # pylint: disable=C0103
 
 import numpy as np
 import networkx as nx
+import matplotlib.pyplot as plt
 
 
 def initialize_rowGraph(m: np.ndarray) -> nx.Graph:
@@ -82,7 +89,7 @@ def get_nodes_s_and_e(Gr: nx.Graph) -> tuple[int, int]:
                 connected_pairs.append((n1, n2))
 
     # Get any of the 2 nodes that are separated by a distance = diameter
-    # Maybe I should just return the first pair found in the nested `for` loops
+    # Maybe just return the first pair found in the nested `for` loops ?
     random_id = np.random.randint(len(connected_pairs))
     return connected_pairs[random_id]
 
@@ -111,12 +118,16 @@ def get_rcgain_i(m: np.ndarray, nb_already_assembled_rows: int, row_id: int) -> 
     `rcgain` : int
         The increase of the front row size and the column row size from the
         permutation of the 2 given rows of the matrix.
+
+    `nold` : int
+        The number of variables in row `i` that are candidates for elimination.
     """
     # Assemble the given row
     matrix = np.array(m, copy=True)
     row = matrix[row_id]
     matrix = np.delete(matrix, row_id, axis=0)
     matrix = np.insert(matrix, nb_already_assembled_rows, row, axis=0)
+
     # Find the values of `s` and `newc
     s = 0
     newc = 0
@@ -133,7 +144,8 @@ def get_rcgain_i(m: np.ndarray, nb_already_assembled_rows: int, row_id: int) -> 
     rgain = 1 - s
     cgain = newc - s
     rcgain = rgain + cgain
-    return rcgain
+    nold = s
+    return rcgain, nold
 
 
 def initialize_P(m: np.ndarray, Gr: nx.Graph, e: int) -> list:
@@ -157,20 +169,35 @@ def initialize_P(m: np.ndarray, Gr: nx.Graph, e: int) -> list:
     -------
     `P` : list
         The initial priority function, linked with `matrix` and `Gr`.
+
+    `v` : float
+        The normalizing factor in the expression of the priority function.
     """
     W1 = 2
     W2 = 1
+    W3 = 0.2
     P = []
+    distances = {}
+
+    # Save the distances between each nodes and the target node in a dictionnary
     for i in range(m.shape[0]):
-        rcgain_i = get_rcgain_i(m, 0, i)
-        d_ie = nx.shortest_path_length(Gr, source=i, target=e)
-        P_i = -W1 * rcgain_i + W2 * d_ie
+        distances[i] = nx.shortest_path_length(Gr, source=i, target=e)
+
+    # Get the normalizing factor
+    v = 1 / np.sqrt(np.sum(value**2 for value in distances.values()))
+
+    # Evaluate the initial priority function
+    for i in range(m.shape[0]):
+        rcgain_i, nold_i = get_rcgain_i(m, 0, i)
+        P_i = W1 * rcgain_i + W2 * v * distances[i] - W3 * nold_i
         P.append(P_i)
-    return P
+    return P, v
 
 
 def get_row_to_assemble(
-    Gr: nx.Graph, P: list, s: int, smallest_value: int = -1e12
+    Gr: nx.Graph,
+    P: list,
+    s: int,
 ) -> tuple[int, int]:
     """
     Purpose
@@ -209,7 +236,7 @@ def get_row_to_assemble(
         not_active_nodes_ids = np.setdiff1d(
             np.arange(len(P_copy)), np.array(active_P_ids)
         )
-        P_copy[not_active_nodes_ids] = smallest_value
+        P_copy[not_active_nodes_ids] = np.NINF
         max_active_P_id = np.argmax(P_copy)
         assembling_idx = nb_assembled_rows
         row_to_assemble_idx = int(max_active_P_id)
@@ -219,6 +246,7 @@ def get_row_to_assemble(
     return assembling_idx, row_to_assemble_idx
 
 
+# Find a way to not have to update the row graph and work with less objects to upgrade
 def update_Gr(Gr: nx.Graph, row_to_assemble_idx: int, assembling_idx: int) -> nx.Graph:
     """
     Purpose
@@ -308,11 +336,11 @@ def update_m(
 def update_P(
     m: np.ndarray,
     P: list,
+    v: float,
     Gr: nx.Graph,
     row_to_assemble_idx: int,
     assembling_idx: int,
     e: int,
-    smallest_value=-1e12,
 ) -> list:
     """
     Purpose
@@ -329,6 +357,9 @@ def update_P(
     `P` : list
         The previous priority function values.
 
+    `v` : float
+        The normalizing factor needed to evaluate the priority function.
+
     `Gr` : nx.Graph
         The row graph that has been properly updated according to the
         modifications done to the given matrix.
@@ -342,26 +373,23 @@ def update_P(
     `e` : int
         The ending node in the row graph (the target node).
 
-    `smallest_value` : int
-        The smallest value corresponds to the value given to the assembled rows.
-        This value facilitates the computation of the maximum value in `P`.
-
     Returns
     -------
     `P` : list
         The updated priority function values, where the assembled row is now
-        linked with the value `smallest_value` and only the `active` rows values
+        linked with the value `np.NINF` and only the `active` rows values
         have been updated.
     """
     P = np.delete(P, row_to_assemble_idx)
-    P = np.insert(P, assembling_idx, smallest_value)
+    P = np.insert(P, assembling_idx, np.NINF)
     W1 = 2
     W2 = 1
+    W3 = 0.2
     for i in Gr.nodes():
         if Gr.nodes[i]["tag"] == "active":
-            rcgain_i = get_rcgain_i(m, assembling_idx + 1, i)
+            rcgain_i, nold_i = get_rcgain_i(m, assembling_idx + 1, i)
             d_ie = nx.shortest_path_length(Gr, source=i, target=e)
-            P_i = -W1 * rcgain_i + W2 * d_ie
+            P_i = W1 * rcgain_i + W2 * v * d_ie - W3 * nold_i
             P[i] = P_i
     return P
 
@@ -369,17 +397,17 @@ def update_P(
 def update_data(
     m: np.ndarray,
     P: list,
+    v: float,
     Gr: nx.Graph,
     rows_to_switch: list,
     e: int,
-    smallest_value: int = -1e12,
 ) -> list:
     """
     Purpose
     -------
     This function lets us permute the desired rows in `m`, update the values in
     `P` and flag nodes in `Gr` that become inactive by specifying a value of
-    `smallest_value` in `P` once the row has been permuted and it relabels the nodes
+    `np.NINF` in `P` once the row has been permuted and it relabels the nodes
     in the row-graph `Gr` according to the row permutation.
 
     Parameters
@@ -390,10 +418,13 @@ def update_data(
     `P` : list
         The priority function applied in the MSRO algorithm.
 
+    `v` : float
+        The normalizing factor needed to evaluate the priority function.
+
     `Gr` : nx.Graph
         The row-graph of the matrix `m`.
 
-    rows_to_switch : list
+    `rows_to_switch` : list
         The index in which the row to assemble will go and the row to assemble in `m`
         according to the values in `P`. Get them by using `get_row_to_assemble()`.
 
@@ -426,8 +457,123 @@ def update_data(
     m = update_m(m, row_to_assemble_idx, assembling_idx)
 
     # Update the values in P
-    P = update_P(
-        m, P, Gr, row_to_assemble_idx, assembling_idx, e, smallest_value=smallest_value
-    )
+    P = update_P(m, P, v, Gr, row_to_assemble_idx, assembling_idx, e)
 
     return m, P, Gr, e
+
+
+def get_mean_row_front_size(m):
+    """
+    Purpose
+    -------
+    Get the mean row front size of the given matrix.
+
+    Parameters
+    ----------
+    `m` : np.ndarray
+        The input matrix for which we want to evaluate the mean front row size.
+
+    Returns
+    -------
+    np.mean(front_row_sizes) : float
+        The mean of the front row size of `m`.
+    """
+    front_row_sizes = []
+    for row in m:
+        ones_indices = np.where(row == 1)[0]
+        front_row_sizes.append(ones_indices[-1] - ones_indices[0])
+    return np.mean(front_row_sizes)
+
+
+def get_max_row_front_size(m):
+    """
+    Purpose
+    -------
+    Get the max row front size of the given matrix.
+
+    Parameters
+    ----------
+    `m` : np.ndarray
+        The input matrix for which we want to evaluate the mean front row size.
+
+    Returns
+    -------
+    np.max(front_row_sizes) : float
+        The max of the front row size of `m`.
+    """
+    front_row_sizes = []
+    for row in m:
+        ones_indices = np.where(row == 1)[0]
+        front_row_sizes.append(ones_indices[-1] - ones_indices[0])
+    return np.max(front_row_sizes)
+
+
+def msro(
+    m: np.ndarray,
+    perm: str = "columns",
+    show_rowGraph: bool = False,
+) -> np.ndarray:
+    """
+    Purpose
+    -------
+    Apply the [MSRO](https://onlinelibrary.wiley.com/doi/abs/10.1002/(SICI)1099-1506(199904/05)6:3%3C189::AID-NLA160%3E3.0.CO;2-C)
+    algorithm on the given matrix `m` in order to minimize the row front size and
+    the front column size at the same time. This algorithm can permute the rows or
+    the columns of `m`. The weights `W1` and `W2` are set to (`W1`,`W2`) = (2,1) for
+    the priority function `P`.
+
+    Parameters
+    ----------
+    `m` : np.ndarray
+        The matrix on which we want to apply the MSRO algorithm.
+
+    `perm` : str
+        Whether to permute the rows or the columns of the given matrix. Set to
+        `columns` by default for the sites relabeling in an MPS-MPO problem.
+
+    `show_rowGraph` : bool
+        Whether to show (True) the row graph or not (False).
+
+    Returns
+    -------
+    * Should return the new row/column order instead of the matrix
+
+    `m` : np.ndarray
+        The modified version of `m` after the application of the algorithm.
+
+    Example
+    -------
+    >>> import numpy as np
+    >>> from MatRexAlgs.msro import msro
+    >>> m = np.random.randint(2, (6,6))
+    >>> optimized_m = msro(m, perm = "columns")
+    """
+    # Properly setup the given matrix to permute the rows or the columns
+    if perm == "columns":
+        matrix = np.array(m, copy=True).T
+    elif perm == "rows":
+        matrix = np.array(m, copy=True)
+    else:
+        error_message = f"""'{perm}' is not an acceptable input for msro().\
+                            Please choose either `rows` or `columns`"""
+        raise ValueError(error_message)
+
+    # Initialize the data for the algorithm
+    Gr = initialize_rowGraph(matrix)
+    if show_rowGraph:
+        nx.draw(Gr, with_labels=True)
+        plt.show()
+    s, e = get_nodes_s_and_e(Gr)
+    P, v = initialize_P(matrix, Gr, e)
+
+    # Update those variables until P contains only -inf
+    while not np.all(P == np.NINF):
+        assembling_idx, row_to_assemble_idx = get_row_to_assemble(Gr, P, s)
+        rows_to_switch = [assembling_idx, row_to_assemble_idx]
+        matrix, P, Gr, e = update_data(matrix, P, v, Gr, rows_to_switch, e)
+
+    # Return the matrix in the same format it was taken as an input
+    if perm == "columns":
+        return matrix.T
+    elif perm == "rows":
+        return matrix
