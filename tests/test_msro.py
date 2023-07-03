@@ -42,9 +42,7 @@ def test_calculate_ordering():
     pass
 
 
-pytest.mark.parametrize("m, n", [(10, 10), (20, 50), (50, 20), (100, 100)])
-
-
+@pytest.mark.parametrize("m, n", [(10, 10), (20, 50), (50, 20), (100, 100)])
 def test_msro_result1(m, n):
     """Test to validate the `matrex.msro.msro()` function's output."""
     matrix = np.zeros((m, n), dtype=int)
