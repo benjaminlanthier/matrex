@@ -44,6 +44,24 @@ In both equations, we have that:
  * $d(i, e)$ is the distance between the row $i$ and the row $e$, where $e$ is the target row, found by using the pseudodiameter of the row graph of the input matrix.
  * $\text{nold}_i$ is "the number of variables in row $i$ that are candidates for elimination and have already been brought into the front" [2].
 
+# Example
+```python
+import numpy as np
+from matrex import msro
+
+m = np.array([[1, 1, 1, 0, 0, 0],
+              [0, 1, 1, 0, 1, 0],
+              [1, 1, 0, 1, 0, 0],
+              [0, 0, 1, 0, 1, 1],
+              [0, 1, 1, 0, 1, 0]])
+# For the rows reordering
+new_columns_order = msro(m)
+reordered_rows_matrix = m[new_columns_order]
+# For the columns reordering
+new_columns_order = msro(m.T)
+reordered_cols_matrix = m[:, new_columns_order]
+```
+
 # Dependencies
 Packages needed to run this algorithm :
  * `numpy`
