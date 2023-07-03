@@ -24,20 +24,20 @@ def test_find_active_rows():
 
 
 def test_change_in_frontsize():
-    """Test for the ``matrex.msro.change_in_frontsize()`` function."""
+    """Test for the `matrex.msro.change_in_frontsize()` function."""
     # TODO
     pass
 
 
 def test_find_front_columns():
-    """Test for the ``matrex.msro.find_front_columns()`` function."""
+    """Test for the `matrex.msro.find_front_columns()` function."""
     # TODO
 
     pass
 
 
 def test_calculate_ordering():
-    """Test for the ``matrex.msro.calculate_ordering()`` function."""
+    """Test for the `matrex.msro.calculate_ordering()` function."""
     # TODO
     pass
 
@@ -46,7 +46,7 @@ pytest.mark.parametrize("m, n", [(10, 10), (20, 50), (50, 20), (100, 100)])
 
 
 def test_msro_result1(m, n):
-    """Test to validate the ``matrex.msro.msro()`` function's output."""
+    """Test to validate the `matrex.msro.msro()` function's output."""
     matrix = np.zeros((m, n), dtype=int)
     for i in range(m):
         indices = np.random.choice(a=range(n), size=3, replace=False)
@@ -56,7 +56,7 @@ def test_msro_result1(m, n):
 
 
 def test_msro_result2():
-    """Test to validate the ``matrex.msro.msro()`` function's output."""
+    """Test to validate the `matrex.msro.msro()` function's output."""
     matrix = np.array(
         [
             [1, 0, 1, 1, 0, 0],
