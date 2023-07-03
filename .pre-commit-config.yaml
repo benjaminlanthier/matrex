@@ -24,7 +24,7 @@ repos:
         - numpy
         - networkx
         name: pylint
-        entry: pylint MatRexAlgs/
+        entry: pylint matrex/
         language: python
         args: [ "--fail-under=8" ]
         pass_filenames: false

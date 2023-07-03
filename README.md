@@ -1,5 +1,5 @@
-# MatRexAlgs
-`MatRexAlgs` stands for Matrix Reordering Algorithms.
+# matrex
+`matrex` stands for *M*atrix *Re*ordering algorithms.
 
 The library implements the Modified Sloan Row Ordering (MSRO) algorithm. By permuting the rows of a matrix, the algorithm minimizes the mean/max front size of this matrix. The front size minimization can be viewed in the following example :
 
@@ -11,10 +11,15 @@ The original Fortran implementation is called [mc62](https://www.hsl.rl.ac.uk/ca
 
 ## Installation
 
-You can install `MatRexAlgs` using `pip`:
+You can install `matrex` using `pip`:
 
 ```bash
 pip install matrex
+```
+
+or by directly downloading it from this github :
+```bash
+pip install matrex@git+https://github.com/benjaminlanthier/matrex
 ```
 
 # The MSRO algorithm

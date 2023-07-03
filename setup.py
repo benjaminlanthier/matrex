@@ -18,8 +18,8 @@ setup(
     long_description_content_type="text/markdown",
     author=["benjaminlanthier", "cotejer"],
     author_email=["benjamin.lanthier2@usherbrooke.ca", "jeremy.cote6@usherbrooke.ca"],
-    url="https://github.com/benjaminlanthier/MatRexAlgs/",
-    packages=["MatRexAlgs"],
+    url="https://github.com/benjaminlanthier/matrex/",
+    packages=["matrex"],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
