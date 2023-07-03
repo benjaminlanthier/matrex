@@ -17,10 +17,11 @@ Date created: 2023-06-16
 from operator import itemgetter
 import numpy as np
 import networkx as nx
+
 try:
     import matplotlib.pyplot as plt
 except ImportError:
-    plt = None
+    ploting = None
 
 
 def pseudodiameter(graph: nx.Graph, seed: int = 111) -> tuple[int, int]:
@@ -59,7 +60,7 @@ def pseudodiameter(graph: nx.Graph, seed: int = 111) -> tuple[int, int]:
             break
         if new_distance == distance:
             finalDegrees = dict(graph.degree(nbunch=distances.keys()))
-            start = min(finalDegrees, key=finalDegrees.get)
+            start = min(finalDegrees, key=finalDegrees.get)  # type: ignore
             final_loop = True
         else:
             start = farthest_node
@@ -81,7 +82,7 @@ def find_active_rows(reordered: np.ndarray, row_graph: np.ndarray) -> np.ndarray
 
     Arguments
     ---------
-    reordered : np.ndarray of ints
+    reordered : list
         The current rows that are part of the front.
 
     row_graph : np.ndarray
@@ -355,7 +356,7 @@ def msro(
 
     # Compute initial distances between rows of the matrix.
     row_graph = nx.from_numpy_array(matrix @ matrix.T)
-    if plt is not None:
+    if ploting is not None and show_row_graph:
         nx.draw(row_graph, with_labels=True)
         plt.show()
 

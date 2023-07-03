@@ -21,7 +21,9 @@ def change_in_frontsize(front, row, remaining):
     - Output:
       - (integer): The change in front sizes.
     """
-    front_columns = np.any(a=front, axis=0)  # Boolean mask for which indices are present
+    # Boolean mask for which indices are present
+    front_columns = np.any(a=front, axis=0)
+
     new_columns = np.sum(np.logical_and(~front_columns, row))
     fully_summed = np.sum(np.logical_and(~np.any(a=remaining, axis=0), row))
     return 1 + new_columns - 2 * fully_summed
