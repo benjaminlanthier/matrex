@@ -20,6 +20,7 @@ from msro2 import msro as msro2
 from MatRexAlgs.msro import msro  # type: ignore
 
 
+# # Kept it so it is still accessible
 # def get_widths(matrix):
 #     widths = []
 #     for row in matrix:
@@ -63,6 +64,7 @@ if __name__ == "__main__":
             if count % 100 == 0:
                 print(f"msro1 order : {msro1_order}")
                 print(f"msro2 order : {msro2_order}")
+                print(f"msro order  : {msro_order}")
                 print()
 
         results = np.sum(comparison, axis=0)
