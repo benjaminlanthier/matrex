@@ -8,7 +8,7 @@ sys.path.append(os.path.realpath(os.path.dirname(__file__) + "/.."))
 import numpy as np
 import pytest
 
-from MatRexAlgs.msro import (  # type: ignore
+from matrex.msro import (  # type: ignore
     find_active_rows,
     change_in_frontsize,
     find_front_columns,

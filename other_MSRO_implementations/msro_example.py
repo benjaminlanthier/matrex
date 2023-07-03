@@ -17,7 +17,7 @@ import numpy as np
 from msro1 import msro as msro1
 from msro2 import msro as msro2
 
-from MatRexAlgs.msro import msro  # type: ignore
+from matrex.msro import msro  # type: ignore
 
 
 # # Kept it so it is still accessible
