@@ -3,7 +3,7 @@
 
 The library implements the _Modified Sloan Row Ordering_ (MSRO) algorithm. By permuting the rows of a matrix, the algorithm minimizes the mean/max front size of this matrix. The front size minimization can be viewed in the following example :
 
-![](https://github.com/benjaminlanthier/MatRexAlgs/assets/91567620/cce9ec89-97a1-4749-8bbc-d172cb108474)
+![](https://github.com/benjaminlanthier/matrex/assets/91567620/9710872c-8b2e-4487-b20c-2e1b4ea788b0)
 
 Here, the black squares represent the position in the matrix where there is a non-zero value. The columns of the matrix have been reordered so that those values are closer together as much as possible in each row. The mean of this distance (difference between first and last non-zero index in a row) is shown on top of those pictures (before vs after msro application).
 
