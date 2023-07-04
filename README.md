@@ -1,9 +1,9 @@
 # matrex
-`matrex` stands for **Mat**rix **Re**ordering algorithms.
+`matrex` stands for **Mat**ri**x** **Re**ordering algorithms.
 
-The library implements the Modified Sloan Row Ordering (MSRO) algorithm. By permuting the rows of a matrix, the algorithm minimizes the mean/max front size of this matrix. The front size minimization can be viewed in the following example :
+The library implements the _Modified Sloan Row Ordering_ (MSRO) algorithm. By permuting the rows of a matrix, the algorithm minimizes the mean/max front size of this matrix. The front size minimization can be viewed in the following example :
 
-![image](https://github.com/benjaminlanthier/MatRexAlgs/assets/91567620/cce9ec89-97a1-4749-8bbc-d172cb108474)
+![](https://github.com/benjaminlanthier/MatRexAlgs/assets/91567620/cce9ec89-97a1-4749-8bbc-d172cb108474)
 
 Here, the black squares represent the position in the matrix where there is a non-zero value. The columns of the matrix have been reordered so that those values are closer together as much as possible in each row. The mean of this distance (difference between first and last non-zero index in a row) is shown on top of those pictures (before vs after msro application).
 
