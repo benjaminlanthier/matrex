@@ -18,6 +18,7 @@ pip install matrex
 ```
 
 or by directly downloading it from this github :
+
 ```bash
 pip install matrex@git+https://github.com/benjaminlanthier/matrex
 ```
