@@ -17,7 +17,7 @@ You can install `matrex` using `pip`:
 pip install matrex
 ```
 
-or by directly downloading it from this github :
+or by directly downloading it from this [github repository](https://github.com/benjaminlanthier/matrex) :
 
 ```bash
 pip install matrex@git+https://github.com/benjaminlanthier/matrex
@@ -56,8 +56,8 @@ m = np.array([[1, 1, 1, 0, 0, 0],
               [0, 0, 1, 0, 1, 1],
               [0, 1, 1, 0, 1, 0]])
 # For the rows reordering
-new_columns_order = msro(m)
-reordered_rows_matrix = m[new_columns_order]
+new_rows_order = msro(m)
+reordered_rows_matrix = m[new_rows_order]
 # For the columns reordering
 new_columns_order = msro(m.T)
 reordered_cols_matrix = m[:, new_columns_order]
