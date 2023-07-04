@@ -1,3 +1,23 @@
 [build-system]
-requires = ["setuptools>=61.0"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "matrex"
+version = "0.0.1"
+authors = [
+  { name="benjaminlanthier", email="benjamin.lanthier2@usherbrooke.ca" },
+  { name="cotejer", email="jeremy.cote6@usherbrooke.ca"},
+]
+description = "A package grouping matrices row reordering algorithms to minimize their front size."
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/benjaminlanthier/matrex"
+"Bug Tracker" = "https://github.com/benjaminlanthier/matrex/issues"
