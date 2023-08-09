@@ -130,33 +130,35 @@ def change_in_frontsize(
 
     Example
     -------
-    >>> matrix = np.array([[0, 1, 1, 0, 0],
-    >>>                    [1, 0, 0, 1, 0],
-    >>>                    [1, 0, 0, 1, 1],
-    >>>                    [1, 1, 1, 1, 0],
-    >>>                    [0, 1, 0, 1, 0],
-    >>>                    [1, 0, 1, 1, 1]])
+    ```python
+    matrix = np.array([[0, 1, 1, 0, 0],
+                       [1, 0, 0, 1, 0],
+                       [1, 0, 0, 1, 1],
+                       [1, 1, 1, 1, 0],
+                       [0, 1, 0, 1, 0],
+                       [1, 0, 1, 1, 1]])
 
-    >>> front = [[0, 1, 1, 0, 0],
-    >>>          [1, 0, 0, 1, 0]]
+    front = [[0, 1, 1, 0, 0],
+             [1, 0, 0, 1, 0]]
 
-    >>> candidate_rows = [[1, 0, 0, 1, 1],
-    >>>                   [1, 1, 1, 1, 0],
-    >>>                   [0, 1, 0, 1, 0],
-    >>>                   [1, 0, 1, 1, 1]]
+    candidate_rows = [[1, 0, 0, 1, 1],
+                      [1, 1, 1, 1, 0],
+                      [0, 1, 0, 1, 0],
+                      [1, 0, 1, 1, 1]]
 
-    >>> remaining_rows = [[[1, 1, 1, 1, 0],
-    >>>                    [0, 1, 0, 1, 0],
-    >>>                    [1, 0, 1, 1, 1]],
-    >>>                   [[1, 0, 0, 1, 1],
-    >>>                    [0, 1, 0, 1, 0],
-    >>>                    [1, 0, 1, 1, 1]],
-    >>>                   [[1, 0, 0, 1, 1],
-    >>>                    [1, 1, 1, 1, 0],
-    >>>                    [1, 0, 1, 1, 1]],
-    >>>                   [[1, 0, 0, 1, 1],
-    >>>                    [1, 1, 1, 1, 0],
-    >>>                    [0, 1, 0, 1, 0]]]
+    remaining_rows = [[[1, 1, 1, 1, 0],
+                       [0, 1, 0, 1, 0],
+                       [1, 0, 1, 1, 1]],
+                      [[1, 0, 0, 1, 1],
+                       [0, 1, 0, 1, 0],
+                       [1, 0, 1, 1, 1]],
+                      [[1, 0, 0, 1, 1],
+                       [1, 1, 1, 1, 0],
+                       [1, 0, 1, 1, 1]],
+                      [[1, 0, 0, 1, 1],
+                       [1, 1, 1, 1, 0],
+                       [0, 1, 0, 1, 0]]]
+    ```
 
     * Note that each array in remaining_rows contains the remaining
     rows in the matrix after we remove the front and the row that
@@ -329,29 +331,33 @@ def msro(
 
     Example
     -------
-    >>> import numpy as np
-    >>> from matrex import msro
-    >>> m = np.array([[1, 0, 1, 1, 0, 0],
-    >>>               [0, 1, 0, 1, 1, 0],
-    >>>               [1, 0, 1, 1, 0, 1],
-    >>>               [0, 1, 0, 0, 0, 0],
-    >>>               [0, 0, 0, 1, 1, 1],
-    >>>               [0, 0, 0, 0, 0, 1]])
-    >>> new_order = msro(m)
-    >>> reordered_m = m[new_order]
-    >>> print(f"The new rows ordering : {new_order}")
-    >>> print(f"The reordered matrix : {m}")
+    ```python
+    import numpy as np
+    from matrex import msro
+    m = np.array([[1, 0, 1, 1, 0, 0],
+                  [0, 1, 0, 1, 1, 0],
+                  [1, 0, 1, 1, 0, 1],
+                  [0, 1, 0, 0, 0, 0],
+                  [0, 0, 0, 1, 1, 1],
+                  [0, 0, 0, 0, 0, 1]])
+    new_order = msro(m)
+    reordered_m = m[new_order]
+    print(f"The new rows ordering : {new_order}")
+    print(f"The reordered matrix : {m}")
+    ```
 
     * The output should be :
 
-    >>> The new rows ordering : [3, 1, 4, 5, 2, 0]
-    >>> The reordered matrix :
-    >>> array([[0 1 0 0 0 0],
-    >>>        [0 1 0 1 1 0],
-    >>>        [0 0 0 1 1 1],
-    >>>        [0 0 0 0 0 1],
-    >>>        [1 0 1 1 0 1],
-    >>>        [1 0 1 1 0 0]])
+    ```python
+    The new rows ordering : [3, 1, 4, 5, 2, 0]
+    The reordered matrix :
+    array([[0 1 0 0 0 0],
+           [0 1 0 1 1 0],
+           [0 0 0 1 1 1],
+           [0 0 0 0 0 1],
+           [1 0 1 1 0 1],
+           [1 0 1 1 0 0]])
+    ```
     """
     # Only consider the nonzero pattern of elements
     matrix = input_matrix.astype(bool)
