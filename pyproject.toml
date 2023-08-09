@@ -19,5 +19,5 @@ classifiers = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/benjaminlanthier/matrex"
-"Bug Tracker" = "https://github.com/benjaminlanthier/matrex/issues"
+"Homepage" = "https://github.com/quicophy/matrex"
+"Bug Tracker" = "https://github.com/quicophy/matrex/issues"

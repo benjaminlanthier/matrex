@@ -17,10 +17,10 @@ You can install `matrex` using `pip`:
 pip install matrex
 ```
 
-or by directly downloading it from this [github repository](https://github.com/benjaminlanthier/matrex) :
+or by directly downloading it from this [github repository](https://github.com/benjaminlanthier/matrex) (recommanded) :
 
 ```bash
-pip install matrex@git+https://github.com/benjaminlanthier/matrex
+pip install matrex@git+https://github.com/quicophy/matrex
 ```
 
 # The MSRO algorithm
