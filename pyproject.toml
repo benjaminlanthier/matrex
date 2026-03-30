@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "matrex"
-version = "0.0.1"
+version = "0.0.2"
 authors = [
   { name="benjaminlanthier", email="benjamin.lanthier2@usherbrooke.ca" },
   { name="cotejer", email="jeremy.cote6@usherbrooke.ca"},
@@ -13,11 +13,16 @@ description = "A package grouping matrices row reordering algorithms to minimize
 readme = "README.md"
 requires-python = ">=3.9"
 classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
 ]
+dependencies = ["numpy", "networkx"]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+plot = ["matplotlib"]
 
 [project.urls]
-"Homepage" = "https://github.com/quicophy/matrex"
-"Bug Tracker" = "https://github.com/quicophy/matrex/issues"
+Homepage = "https://github.com/benjaminlanthier/matrex"
+"Bug Tracker" = "https://github.com/benjaminlanthier/matrex/issues"
