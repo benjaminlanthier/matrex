@@ -20,7 +20,7 @@ classifiers = [
 dependencies = ["numpy", "networkx"]
 
 [project.optional-dependencies]
-dev = ["pytest"]
+dev = ["pytest", "twine>=6.2.0"]
 plot = ["matplotlib"]
 
 [project.urls]
