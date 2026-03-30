@@ -3,7 +3,7 @@
 
 The library implements the _Modified Sloan Row Ordering_ (MSRO) algorithm. By permuting the rows of a matrix, the algorithm minimizes the mean/max front size of this matrix. The front size minimization can be viewed in the following example :
 
-![](https://github.com/benjaminlanthier/matrex/assets/91567620/9710872c-8b2e-4487-b20c-2e1b4ea788b0)
+![](figures/msro_example.png)
 
 Here, the black squares represent the position in the matrix where there is a non-zero value. The columns of the matrix have been reordered so that those values are closer together as much as possible in each row. The mean of this distance (difference between first and last non-zero index in a row) is shown on top of those pictures (before vs after msro application).
 
@@ -20,7 +20,7 @@ pip install matrex
 or by directly downloading it from this [github repository](https://github.com/benjaminlanthier/matrex) (recommanded) :
 
 ```bash
-pip install matrex@git+https://github.com/quicophy/matrex
+pip install matrex@git+https://github.com/benjaminlanthier/matrex
 ```
 
 # The MSRO algorithm
@@ -68,6 +68,18 @@ Packages needed to run this algorithm :
  * `numpy`
  * `networkx`
  * _Optional_ : `matplotlib` (for visualizing the row graph)
+
+# Citation
+```
+@software{lanthier_matrex_2023,
+  author    = {Benjamin Lanthier, Jeremy Côté},
+  title     = {matrex},
+  year      = {2023},
+  version   = {0.0.2},
+  url       = {https://github.com/benjaminlanthier/matrex},
+  note      = {Available on PyPI: https://pypi.org/project/matrex}
+}
+```
 
 # References
 [1] Scott, Jennifer A. ‘A New Row Ordering Strategy for Frontal Solvers’. Numerical Linear Algebra with Applications, vol. 6, no. 3, Apr. 1999, pp. 189–211. [DOI](https://doi.org/10.1002/(SICI)1099-1506(199904/05)6:3<189::AID-NLA160>3.0.CO;2-C).
